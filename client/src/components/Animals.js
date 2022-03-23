@@ -1,36 +1,36 @@
 import { useState, useEffect } from "react";
-//import Form from "./form";
+import SpecifiesForm from "./SpeciesForm";
 
 function Animals() {
 
-    const [animals, setAnimals] = useState([]);
+    const [species, setSpecies] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/animals")
+        fetch("http://localhost:8080/api/species")
         .then((response) => response.json())
-        .then(animals =>{
-            setAnimals(animals)      
+        .then(species =>{
+          setSpecies(species)      
         })
         
     }, []);
 
     
 
-    // const addStudent = (newStudent) => {
-    //     //console.log(newStudent);
-    //     //postStudent(newStudent);
-    //     setStudents((students) => [...students, newStudent]);
-    // }
+    const addSpecies = (newSpecies) => {
+        console.log(newSpecies);
+        //postSpecies(newSpecies);
+        setSpecies((species) => [...species, newSpecies]);
+    }
 
 
     return (
       <div className="animals">
         <h2> List of Animals </h2>
         <ul>
-            {animals.map(animal =>
-                <li key={animal.id}> {animal.commonname} {animal.scientificname} {animal.numberinthewild}</li>)}
+            {species.map(specie =>
+                <li key={specie.id}> {specie.commonname} {specie.scientificname} {specie.numberinthewild}</li>)}
         </ul>
-        {/* <Form addStudent={addStudent} /> */}
+        <SpecifiesForm addSpecies={addSpecies} />
       </div>
     );
   }

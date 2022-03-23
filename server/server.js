@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 //create the get request
-app.get('/api/animals', cors(), async (req, res) => {
+app.get('/api/species', cors(), async (req, res) => {
     // const STUDENTS = [
 
     //     { id: 1, firstName: 'Lisa', lastName: 'Lee' },
@@ -26,24 +26,27 @@ app.get('/api/animals', cors(), async (req, res) => {
     // ];
     // res.json(STUDENTS);
     try{
-        const { rows: animals } = await db.query('SELECT * FROM animals');
-        res.send(animals);
+        const { rows: species } = await db.query('SELECT * FROM Species');
+        res.send(species);
     } catch (e){
         return res.status(400).json({e});
     }
 });
 
 //create the POST request
-// app.post('/api/students', cors(), async (req, res) => {
-//     const newUser = { firstname: req.body.firstname, lastname: req.body.lastname }
-//     console.log([newUser.firstname, newUser.lastname]);
-//     const result = await db.query(
-//         'INSERT INTO students(firstname, lastname) VALUES($1, $2) RETURNING *',
-//         [newUser.firstname, newUser.lastname]
-//     );
-//     console.log(result.rows[0]);
-//     res.json(result.rows[0]);
-// });
+app.post('/api/species', cors(), async (req, res) => {
+    const newAnimal = { commonname: req.body.commonname, scientificname: req.body.scientificname }
+    console.log("testing info ", [newAnimal.commonname, newAnimal.scientificname]);
+    const result = await db.query(
+        //a function with 2 parameters, the titles u want to insert into
+        'INSERT INTO students(firstname, lastname) VALUES($1, $2) RETURNING *',
+        //array of the values defined above
+        [newAnimal.firstname, newAnimal.lastname]
+    );
+    //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
+    console.log(result.rows[0]);
+    res.json(result.rows[0]);
+});
 
 // console.log that your server is up and running
 app.listen(PORT, () => {
