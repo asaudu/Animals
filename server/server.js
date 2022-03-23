@@ -16,15 +16,7 @@ app.get('/', (req, res) => {
 
 //create the get request
 app.get('/api/species', cors(), async (req, res) => {
-    // const STUDENTS = [
-
-    //     { id: 1, firstName: 'Lisa', lastName: 'Lee' },
-    //     { id: 2, firstName: 'Eileen', lastName: 'Long' },
-    //     { id: 3, firstName: 'Fariba', lastName: 'Dako' },
-    //     { id: 4, firstName: 'Cristina', lastName: 'Rodriguez' },
-    //     { id: 5, firstName: 'Andrea', lastName: 'Trejo' },
-    // ];
-    // res.json(STUDENTS);
+   
     try{
         const { rows: species } = await db.query('SELECT * FROM Species');
         res.send(species);
@@ -33,15 +25,70 @@ app.get('/api/species', cors(), async (req, res) => {
     }
 });
 
+app.get('/api/individuals', cors(), async (req, res) => {
+    
+    try{
+        const { rows: species } = await db.query('SELECT * FROM Individuals');
+        res.send(species);
+    } catch (e){
+        return res.status(400).json({e});
+    }
+});
+
+app.get('/api/sightings', cors(), async (req, res) => {
+    
+    try{
+        const { rows: species } = await db.query('SELECT * FROM Sightings');
+        res.send(species);
+    } catch (e){
+        return res.status(400).json({e});
+    }
+});
+
 //create the POST request
 app.post('/api/species', cors(), async (req, res) => {
-    const newAnimal = { commonname: req.body.commonname, scientificname: req.body.scientificname }
+    //object which defines what properties you want from the request
+    const newAnimal = req.body
+    //{ commonname: req.body.commonname, scientificname: req.body.scientificname, numberinthewild: req.body.numberinthewild, conservationstatuscode: req.body.conservationstatuscode, recordcreation: req.body.recordcreation }
     console.log("testing info ", [newAnimal.commonname, newAnimal.scientificname]);
     const result = await db.query(
         //a function with 2 parameters, the titles u want to insert into
-        'INSERT INTO students(firstname, lastname) VALUES($1, $2) RETURNING *',
-        //array of the values defined above
-        [newAnimal.firstname, newAnimal.lastname]
+        'INSERT INTO species(commonname, scientificname, numberinthewild, conservationstatuscode, recordcreation) VALUES($1, $2, $3, $4, $5) RETURNING *',
+        //array of the parameters defined above
+        [newAnimal.commonname, newAnimal.scientificname, newAnimal.numberinthewild, newAnimal.conservationstatuscode, newAnimal.recordcreation]
+    );
+    //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
+    console.log(result.rows[0]);
+    res.json(result.rows[0]);
+});
+
+app.post('/api/individuals', cors(), async (req, res) => {
+    //object which defines what properties you want from the request
+    const newIndividual = req.body
+    
+    console.log("testing info ", [newIndividual.nickname, newIndividual.species]);
+    const result = await db.query(
+        //a function with 2 parameters, the titles u want to insert into
+        'INSERT INTO individuals(nickname, species, recordcreation) VALUES($1, $2, $3) RETURNING *',
+        //array of the parameters defined above
+        [newIndividual.nickname, newIndividual.species, newIndividual.recordcreation]
+    );
+    //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
+    console.log(result.rows[0]);
+    res.json(result.rows[0]);
+});
+
+
+app.post('/api/sightings', cors(), async (req, res) => {
+    //object which defines what properties you want from the request
+    const newSighting = req.body
+    console.log("testing info ", [newSighting.dateandtimeofsighting, newSighting.individualseen]);
+
+    const result = await db.query(
+        //a function with 2 parameters, the titles u want to insert into
+        'INSERT INTO species(dateandtimeofsighting, individualseen, sightinglocation, healthycondition, emailaddress, recordcreation) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+        //array of the parameters defined above
+        [newSighting.dateandtimeofsighting, newSighting.individualseen, newSighting.sightinglocation, newSighting.healthycondition, newSighting.emailaddress, newSighting.recordcreation]
     );
     //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
     console.log(result.rows[0]);

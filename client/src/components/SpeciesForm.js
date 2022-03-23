@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 const SpecifiesForm = (props) => {
 
     const [species, setSpecies] = useState({
@@ -71,10 +72,9 @@ const SpecifiesForm = (props) => {
         setSpecies(species);
         postSpecies(species);
         props.addSpecies(species);
-        setSpecies(emptySpecies);
-        
-        
+        setSpecies(emptySpecies);     
     };
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -104,7 +104,7 @@ const SpecifiesForm = (props) => {
                     id="add-numbers-in-the-wild"
                     placeholder="Numbers in the wild"
                     required
-                    value={species.numbersinthewild}
+                    value={species.numberinthewild}
                     onChange={handleNumberInTheWildChange}
                 /> <br/>
                 <label>Conservation Status Code</label>
@@ -118,15 +118,17 @@ const SpecifiesForm = (props) => {
                 /> <br/>
                 <label>Record Creation Timestamp</label>
                 <input
-                    type="datetime"
+                    type="datetime-local"
                     id="record-creation-timestamp"
                     placeholder="Record Timestamp"
                     required
                     value={species.recordcreation}
                     onChange={handleRecordCreationChange}
-                />
+                /> <br/> <br/>
+                <button type="submit">Add</button>
+
             </fieldset>
-            <button type="submit">Add</button>
+            
         </form>
     );
 };
