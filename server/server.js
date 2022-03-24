@@ -25,15 +25,15 @@ app.get('/api/species', cors(), async (req, res) => {
     }
 });
 
-app.get('/api/individuals', cors(), async (req, res) => {
+// app.get('/api/individuals', cors(), async (req, res) => {
     
-    try{
-        const { rows: species } = await db.query('SELECT * FROM Individuals');
-        res.send(species);
-    } catch (e){
-        return res.status(400).json({e});
-    }
-});
+//     try{
+//         const { rows: species } = await db.query('SELECT * FROM Individuals');
+//         res.send(species);
+//     } catch (e){
+//         return res.status(400).json({e});
+//     }
+// });
 
 app.get('/api/sightings', cors(), async (req, res) => {
     
@@ -62,21 +62,21 @@ app.post('/api/species', cors(), async (req, res) => {
     res.json(result.rows[0]);
 });
 
-app.post('/api/individuals', cors(), async (req, res) => {
-    //object which defines what properties you want from the request
-    const newIndividual = req.body
+// app.post('/api/individuals', cors(), async (req, res) => {
+//     //object which defines what properties you want from the request
+//     const newIndividual = req.body
     
-    console.log("testing info ", [newIndividual.nickname, newIndividual.species]);
-    const result = await db.query(
-        //a function with 2 parameters, the titles u want to insert into
-        'INSERT INTO individuals(nickname, species, recordcreation) VALUES($1, $2, $3) RETURNING *',
-        //array of the parameters defined above
-        [newIndividual.nickname, newIndividual.species, newIndividual.recordcreation]
-    );
-    //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
-    console.log(result.rows[0]);
-    res.json(result.rows[0]);
-});
+//     console.log("testing info ", [newIndividual.nickname, newIndividual.species]);
+//     const result = await db.query(
+//         //a function with 2 parameters, the titles u want to insert into
+//         'INSERT INTO individuals(nickname, species, recordcreation) VALUES($1, $2, $3) RETURNING *',
+//         //array of the parameters defined above
+//         [newIndividual.nickname, newIndividual.species, newIndividual.recordcreation]
+//     );
+//     //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
+//     console.log(result.rows[0]);
+//     res.json(result.rows[0]);
+// });
 
 
 app.post('/api/sightings', cors(), async (req, res) => {
@@ -86,7 +86,7 @@ app.post('/api/sightings', cors(), async (req, res) => {
 
     const result = await db.query(
         //a function with 2 parameters, the titles u want to insert into
-        'INSERT INTO species(dateandtimeofsighting, individualseen, sightinglocation, healthycondition, emailaddress, recordcreation) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+        'INSERT INTO sightings(dateandtimeofsighting, individualseen, sightinglocation, healthycondition, emailaddress, recordcreation) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
         //array of the parameters defined above
         [newSighting.dateandtimeofsighting, newSighting.individualseen, newSighting.sightinglocation, newSighting.healthycondition, newSighting.emailaddress, newSighting.recordcreation]
     );
