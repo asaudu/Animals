@@ -38,8 +38,8 @@ app.get('/api/species', cors(), async (req, res) => {
 app.get('/api/sightings', cors(), async (req, res) => {
     
     try{
-        const { rows: species } = await db.query('SELECT * FROM Sightings');
-        res.send(species);
+        const { rows: sightings } = await db.query('SELECT * FROM Sightings');
+        res.send(sightings);
     } catch (e){
         return res.status(400).json({e});
     }
@@ -62,35 +62,17 @@ app.post('/api/species', cors(), async (req, res) => {
     res.json(result.rows[0]);
 });
 
-// app.post('/api/individuals', cors(), async (req, res) => {
-//     //object which defines what properties you want from the request
-//     const newIndividual = req.body
-    
-//     console.log("testing info ", [newIndividual.nickname, newIndividual.species]);
-//     const result = await db.query(
-//         //a function with 2 parameters, the titles u want to insert into
-//         'INSERT INTO individuals(nickname, species, recordcreation) VALUES($1, $2, $3) RETURNING *',
-//         //array of the parameters defined above
-//         [newIndividual.nickname, newIndividual.species, newIndividual.recordcreation]
-//     );
-//     //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
-//     console.log(result.rows[0]);
-//     res.json(result.rows[0]);
-// });
 
 
 app.post('/api/sightings', cors(), async (req, res) => {
-    //object which defines what properties you want from the request
-    const newSighting = req.body
+    const newSighting = { dateandtimeofsighting: req.body.dateandtimeofsighting, individualseen: req.body.individualseen, sightinglocation: req.body.sightinglocation, healthycondition: req.body.healthycondition, emailaddress: req.body.emailaddress, recordcreation: req.body.recordcreation }
     console.log("testing info ", [newSighting.dateandtimeofsighting, newSighting.individualseen]);
 
     const result = await db.query(
-        //a function with 2 parameters, the titles u want to insert into
         'INSERT INTO sightings(dateandtimeofsighting, individualseen, sightinglocation, healthycondition, emailaddress, recordcreation) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-        //array of the parameters defined above
         [newSighting.dateandtimeofsighting, newSighting.individualseen, newSighting.sightinglocation, newSighting.healthycondition, newSighting.emailaddress, newSighting.recordcreation]
     );
-    //to get more specific with the display, could utilize result.rowCount and add an if statement after the console.log ie if(result.rowCount > 0)
+    
     console.log(result.rows[0]);
     res.json(result.rows[0]);
 });

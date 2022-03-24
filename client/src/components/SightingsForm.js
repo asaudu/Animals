@@ -6,7 +6,7 @@ const SightingsForm = (props) => {
         dateandtimeofsighting: "",
         individualseen: "",
         sightinglocation: "",
-        healthycondition: "",
+        healthycondition: false,
         emailaddress: "",
         recordcreation: ""
     });
@@ -24,12 +24,6 @@ const SightingsForm = (props) => {
 
     }
 
-    const handleNumberInTheWildChange = (event) => {
-        const sightinglocation = event.target.value;
-        setSightings((sightings) => ({ ...sightings, sightinglocation }));
-
-    }
-
     const handleSightingLocationChange = (event) => {
         const sightinglocation = event.target.value;
         setSightings((sightings) => ({ ...sightings, sightinglocation }));
@@ -37,10 +31,12 @@ const SightingsForm = (props) => {
     }
 
     const handleHealthyConditionChange = (event) => {
-        const healthycondition = event.target.value;
+        const healthycondition = event.currentTarget.value === "true" ? true : false;
+        //console.log(event.currentTarget);
         setSightings((sightings) => ({ ...sightings, healthycondition }));
 
     }
+    
 
     const handleEmailChange = (event) => {
         const emailaddress = event.target.value;
@@ -55,20 +51,17 @@ const SightingsForm = (props) => {
     }
 
     //A function to handle the post request
-    const postSightings = (newSpecies) => {
-        return fetch('http://localhost:8080/api/species', {
-        //must define the method you want to use
-        method: 'POST',
-        //let's you know what format the content will come in
-        headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify(newSpecies)
-      }).then((response) => {
-          return response.json()
-      }).then((data) => {
+    const postSightings = async (newSightings) => {
+        const response = await fetch('http://localhost:8080/api/sightings', {
+            //must define the method you want to use
+            method: 'POST',
+            //let's you know what format the content will come in
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newSightings)
+        });
+        const data = await response.json();
         console.log("From the post ", data);
-        props.addSpecies(data);
-      
-    });
+        props.addSightings(data);
     }
 
     const handleSubmit = (e) => {
@@ -87,16 +80,16 @@ const SightingsForm = (props) => {
         props.addSightings(sightings);
         setSightings(emptySightings);     
     };
-
+    //console.log(sightings);
 
     return (
         <form onSubmit={handleSubmit}>
             <fieldset>
                 <label>Date/Time of Sighting</label>
                 <input
-                    type="text"
+                    type="datetime-local"
                     //id="add-common-name"
-                    placeholder="Sighting Time"
+                    //placeholder="Sighting Time"
                     required
                     value={sightings.dateandtimeofsighting}
                     onChange={handleDateTimeSightingChange}
@@ -113,7 +106,7 @@ const SightingsForm = (props) => {
                 /> <br/>
                 <label>Sighting Location</label>
                 <input
-                    type="number"
+                    type="text"
                     //id="add-numbers-in-the-wild"
                     placeholder="Sighting Location"
                     required
@@ -122,13 +115,25 @@ const SightingsForm = (props) => {
                 /> <br/>
                 <label>Healthy Condition</label>
                 <input
-                    type="number"
+                    type="radio"
                     //id="add-numbers-in-the-wild"
-                    placeholder="Healthy Condition"
-                    required
-                    value={sightings.healthycondition}
+                    //placeholder="Healthy Condition"
+                    //required
+                    name="healthyCondition"
+                    value={true}
+                    onChange={handleHealthyConditionChange} 
+                    checked={sightings.healthycondition===true}
+                /> <label>True</label>
+                <input
+                    type="radio"
+                    //id="add-numbers-in-the-wild"
+                    //placeholder="Unhealthy Condition"
+                    //required
+                    name="healthyCondition"
+                    value={false}
                     onChange={handleHealthyConditionChange}
-                /> <br/>
+                    checked={sightings.healthycondition===false}
+                /> <label>False</label><br/>
                 <label>Email Address</label>
                 <input
                     type="text"

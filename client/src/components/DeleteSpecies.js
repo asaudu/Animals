@@ -6,7 +6,7 @@ const DeleteSpecies = ({deleteSpecies}) => {
 
     return(
         <div>
-            <h3>Delete Species by ID</h3>
+            <h3> Delete Species by ID </h3>
             <form id="" action="#" onSubmit={(e) => {e.preventDefault(); deleteSpecies(deleteId); setDeleteId('') }}>
                 <fieldset>
                     <label>Species ID</label>
